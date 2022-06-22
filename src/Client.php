@@ -163,4 +163,25 @@ class Client implements LNDHubClient
       // raise exception
     }
   }
+
+  public static function createAlbyWallet($email, $password)
+  {
+    $headers = [
+      "Accept" => "application/json",
+      "Content-Type" => "application/json",
+      "Access-Control-Allow-Origin" => "*",
+    ];
+    $body = ["email" => $email, "password" => $password];
+    $request = new GuzzleHttp\Psr7\Request(
+      "POST",
+      "/api/users",
+      $headers,
+      json_encode($body)
+    );
+    $client = new GuzzleHttp\Client(["base_uri" => "https://getalby.com"]);
+    $response = $client->send($request);
+    $responseBody = $response->getBody()->getContents();
+    $data = json_decode($responseBody, true);
+    return $data;
+  }
 }
