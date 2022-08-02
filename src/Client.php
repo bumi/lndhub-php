@@ -23,9 +23,14 @@ class Client implements LNDHubClient
     $this->password = $password;
   }
 
+  // returns false if the authorize call fails
   public function init()
   {
-    return $this->authorize();
+    try {
+      return $this->authorize();
+    } catch (\Exception $e) {
+      return false;
+    }
   }
 
   private function authorize()
