@@ -115,14 +115,10 @@ class Client implements LNDHubClient
   public function addInvoice($invoice): array
   {
     $params = [ "amt" => $invoice["value"], "memo" => $invoice["memo"] ];
-    if (!empty($invoice["description_hash"])) {
+    if (array_key_exists("description_hash", $invoice) && !empty($invoice["description_hash"])) {
       $params['description_hash'] = $invoice['description_hash'];
     }
-    $data = $this->request("POST", "/addinvoice", [
-      "amt" => $invoice["value"],
-      "memo" => $invoice["memo"],
-      "description_hash" => $invoice["description_hash"],
-    ]);
+    $data = $this->request("POST", "/addinvoice", $params);
     if (
       is_array($data) &&
       is_array($data["r_hash"]) &&
