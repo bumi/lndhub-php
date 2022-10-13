@@ -188,6 +188,7 @@ class Client implements LNDHubClient
       "Accept" => "application/json",
       "Content-Type" => "application/json",
       "Access-Control-Allow-Origin" => "*",
+      "User-Agent" => "lndhub-php",
     ];
     $body = ["email" => $email, "password" => $password];
     $request = new GuzzleHttp\Psr7\Request(
