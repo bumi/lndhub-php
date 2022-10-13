@@ -139,20 +139,21 @@ class Client implements LNDHubClient
         join(array_map("chr", $data["r_hash"]["data"]))
       );
     }
+    $data["id"] = $data["r_hash"];
     return $data;
   }
 
-  public function getInvoice($checkingId): array
+  public function getInvoice($rHash): array
   {
-    $invoice = $this->request("GET", "/checkpayment/{$checkingId}");
+    $invoice = $this->request("GET", "/checkpayment/{$rHash}");
 
     $invoice["settled"] = $invoice["paid"] ? true : false; //kinda mimic lnd
     return $invoice;
   }
 
-  public function isInvoicePaid($checkingId): bool
+  public function isInvoicePaid($rHash): bool
   {
-    $invoice = $this->getInvoice($checkingId);
+    $invoice = $this->getInvoice($rHash);
     return $invoice["settled"];
   }
 
