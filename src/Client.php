@@ -32,7 +32,7 @@ class Client implements LNDHubClient
   private function authorize()
   {
     // if we got an access token we assume it works.
-    if (!empty($this->access_token) {
+    if (!empty($this->access_token)) {
       return;
     }
     $headers = [
