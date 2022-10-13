@@ -23,22 +23,23 @@ class Client implements LNDHubClient
     $this->password = $password;
   }
 
-  // returns false if the authorize call fails
+  // deprecated
   public function init()
   {
-    try {
-      return $this->authorize();
-    } catch (\Exception $e) {
-      return false;
-    }
+    return true;
   }
 
   private function authorize()
   {
+    // if we got an access token we assume it works.
+    if (!empty($this->access_token) {
+      return;
+    }
     $headers = [
       "Accept" => "application/json",
       "Content-Type" => "application/json",
       "Access-Control-Allow-Origin" => "*",
+      "User-Agent" => "lndhub-php",
     ];
     $body = ["login" => $this->login, "password" => $this->password];
     $request = new GuzzleHttp\Psr7\Request(
@@ -61,11 +62,15 @@ class Client implements LNDHubClient
 
   private function request($method, $path, $body = null)
   {
+    // make sure we have an access token
+    $this->authorize();
+
     $headers = [
       "Accept" => "application/json",
       "Content-Type" => "application/json",
       "Access-Control-Allow-Origin" => "*",
       "Authorization" => "Bearer {$this->access_token}",
+      "User-Agent" => "lndhub-php",
     ];
 
     $requestBody = $body ? json_encode($body) : null;
@@ -109,7 +114,13 @@ class Client implements LNDHubClient
 
   public function isConnectionValid(): bool
   {
-    return !empty($this->access_token);
+    try {
+      // make sure we have an access token
+      $this->authorize();
+      return !empty($this->access_token);
+    } catch(\Exception $e) {
+      return false;
+    }
   }
 
   public function addInvoice($invoice): array
