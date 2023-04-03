@@ -107,7 +107,7 @@ class Client implements LNDHubClient
     if ($this->client) {
       return $this->client;
     }
-    $options = ["base_uri" => $this->url];
+    $options = ["base_uri" => $this->url, 'timeout' => 10];
     $this->client = new GuzzleHttp\Client($options);
     return $this->client;
   }
