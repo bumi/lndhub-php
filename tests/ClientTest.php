@@ -3,7 +3,7 @@
 use LNDHub\Client;
 use PHPUnit\Framework\TestCase;
 
-final class EmailTest extends TestCase
+final class ClientTest extends TestCase
 {
     private function client(): Client
     {
@@ -20,32 +20,21 @@ final class EmailTest extends TestCase
         );
     }
 
-    public function testCanAuthorize(): void
-    {
-        $client = $this->client();
-        $this->assertFalse($client->isConnectionValid());
-        $client->init();
-        $this->assertTrue($client->isConnectionValid());
-    }
-
     public function testCanGetBalance(): void
     {
         $client = $this->client();
-        $client->init();
         $this->assertIsNumeric($client->getBalance()['balance']);
     }
 
     public function testCanGetInfo(): void
     {
         $client = $this->client();
-        $client->init();
         $this->assertIsString($client->getInfo()['alias']);
     }
 
     public function testCanAddInvoice(): void
     {
         $client = $this->client();
-        $client->init();
         $response = $client->addInvoice([
             'value' => 23,
             'memo' => 'test invoice'
@@ -58,7 +47,6 @@ final class EmailTest extends TestCase
     public function testCanGetInvoice(): void
     {
         $client = $this->client();
-        $client->init();
         $response = $client->addInvoice([
             'value' => 23,
             'memo' => 'test invoice'
